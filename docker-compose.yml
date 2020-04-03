@@ -33,8 +33,10 @@ services:
       - OWNCLOUD_REDIS_ENABLED=true
       - OWNCLOUD_REDIS_HOST=redis
       - OWNCLOUD_APPS_ENABLE=openidconnect
+      - OWNCLOUD_LOG_LEVEL=0
     volumes:
       - files:/mnt/data
+
   ocis:
     image: owncloud/ocis:latest
     ports:
@@ -44,8 +46,10 @@ services:
       - OCIS_CONFIG_FILE=/config/proxy-config.json
     volumes:
       - ./proxy-config.json:/config/proxy-config.json
+
   ocis-accounts:
     image: owncloud/ocis-accounts:latest
+
   db:
     image: webhippie/mariadb:latest
     restart: always
