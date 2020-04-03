@@ -45,7 +45,7 @@ services:
       - OCIS_LOG_LEVEL=debug
       - OCIS_CONFIG_FILE=/config/proxy-config.json
     volumes:
-      - ./proxy-config.json:/config/proxy-config.json
+      - ./ocis/proxy-config.json:/config/proxy-config.json
 
   ocis-accounts:
     image: owncloud/ocis-accounts:latest
