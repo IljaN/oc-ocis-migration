@@ -32,12 +32,20 @@ function getConfigFromEnv() {
       0 => $domain
     ],
     'openid-connect' => [
-        'provider-url' => 'https://ocis:9200',
-        'client-id' => 'phoenix',
+        'provider-url' => 'http://ocis:9130',
+        'client-id' => 'oc10',
         'client-secret' => 'super',
         'loginButtonName' => 'OpenId Connect',
         'search-attribute' => 'preferred_username',
         'mode' => 'userid',
+        'provider-params' => [
+          "authorization_endpoint" => "http://ocis:9130/signin/v1/identifier/_/authorize",
+          "token_endpoint" => "http://ocis:9130/konnect/v1/token",
+          "userinfo_endpoint"=> "http://ocis:9130/konnect/v1/userinfo",
+          "end_session_endpoint" => "http://ocis:9130/signin/v1/identifier/_/endsession",
+          "check_session_iframe" => "http://ocis:9130/konnect/v1/session/check-session.html",
+          "jwks_uri" => "http://ocis:9130/konnect/v1/jwks.json"
+        ]
       ],
     'datadirectory' => getenv('OWNCLOUD_VOLUME_FILES'),
     'dbtype' => getenv('OWNCLOUD_DB_TYPE'),

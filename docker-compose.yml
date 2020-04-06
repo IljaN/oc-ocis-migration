@@ -12,7 +12,9 @@ volumes:
 
 services:
   owncloud:
-    build: .
+    build:
+      context: ./owncloud
+      dockerfile: Dockerfile
     ports:
       - 8080:8080
     expose:
@@ -32,20 +34,33 @@ services:
       - OWNCLOUD_MYSQL_UTF8MB4=true
       - OWNCLOUD_REDIS_ENABLED=true
       - OWNCLOUD_REDIS_HOST=redis
-      - OWNCLOUD_APPS_ENABLE=openidconnect
+      - OWNCLOUD_APPS_ENABLE=openidconnect,oauth2
       - OWNCLOUD_LOG_LEVEL=0
     volumes:
       - files:/mnt/data
-
   ocis:
     image: owncloud/ocis:latest
+    build:
+      context: ./ocis
+      dockerfile: Dockerfile
+    depends_on:
+      - ocis-accounts
     ports:
       - 9200:9200
+    expose:
+      - "9130"
     environment:
       - OCIS_LOG_LEVEL=debug
       - OCIS_CONFIG_FILE=/config/proxy-config.json
+      - PROXY_TRANSPORT_TLS_CERT=/proxy_certs/localhost.crt
+      - PROXY_TRANSPORT_TLS_KEY=/proxy_certs/localhost.key
+      - KONNECTD_VALIDATION_KEYS_PATH=/konnectd_keys/
+      - KONNECTD_SIGNING_PRIVATE_KEY=/konnectd_keys/private-key.pem
+      - KONNECTD_ENCRYPTION_SECRET=/konnectd_keys/encryption.key
+      - KONNECTD_TLS=0
     volumes:
       - ./ocis/proxy-config.json:/config/proxy-config.json
+      - ./ocis/identifier-registration.yml:/config/identifier-registration.yml
 
   ocis-accounts:
     image: owncloud/ocis-accounts:latest
